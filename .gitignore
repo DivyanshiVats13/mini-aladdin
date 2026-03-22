@@ -1,0 +1,44 @@
+# ── Java / Maven ──
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+.mvn/wrapper/maven-wrapper.jar
+
+# ── IDE ──
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+.project
+.classpath
+.settings/
+*.code-workspace
+
+# ── Node / Frontend ──
+node_modules/
+dist/
+.next/
+.cache/
+*.tsbuildinfo
+
+# ── Environment & Secrets ──
+.env
+.env.local
+.env.*.local
+application-prod.yml
+**/application-prod.yml
+
+# ── OS ──
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Build / Runtime ──
+*.pid
+*.seed
+*.pid.lock
+logs/

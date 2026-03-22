@@ -1,0 +1,75 @@
+# ─────────────────────────────────────────────
+# API Gateway — DEV Profile
+# ─────────────────────────────────────────────
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          # ── Auth Service (port 8081) ──
+          - id: auth-service
+            uri: http://localhost:8081
+            predicates:
+              - Path=/api/auth/**
+            filters:
+              - StripPrefix=1
+
+          # ── Portfolio Service (port 8082) ──
+          - id: portfolio-service
+            uri: http://localhost:8082
+            predicates:
+              - Path=/api/portfolios/**
+            filters:
+              - StripPrefix=1
+
+          - id: asset-service
+            uri: http://localhost:8082
+            predicates:
+              - Path=/api/assets/**
+            filters:
+              - StripPrefix=1
+
+          # ── Risk Engine (port 8083) ──
+          - id: risk-engine
+            uri: http://localhost:8083
+            predicates:
+              - Path=/api/risk/**
+            filters:
+              - StripPrefix=1
+
+          # ── Rebalance Engine (port 8084) ──
+          - id: rebalance-engine
+            uri: http://localhost:8084
+            predicates:
+              - Path=/api/rebalance/**
+            filters:
+              - StripPrefix=1
+
+          # ── Stress Test Service (port 8085) ──
+          - id: stress-test-service
+            uri: http://localhost:8085
+            predicates:
+              - Path=/api/stress-test/**
+            filters:
+              - StripPrefix=1
+
+          # ── Market Data Service (port 8086) ──
+          - id: market-data-service
+            uri: http://localhost:8086
+            predicates:
+              - Path=/api/prices/**
+            filters:
+              - StripPrefix=1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG

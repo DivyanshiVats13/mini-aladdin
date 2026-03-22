@@ -1,0 +1,31 @@
+# ─────────────────────────────────────────────
+# Market Data Service — Default Configuration
+# ─────────────────────────────────────────────
+spring:
+  application:
+    name: market-data-service
+  profiles:
+    active: dev
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+# API Keys
+app:
+  market-data:
+    alpha-vantage-key: ${ALPHA_VANTAGE_API_KEY:}
+    yahoo-finance-key: ${YAHOO_FINANCE_API_KEY:}
+    truedata-key: ${TRUEDATA_API_KEY:}
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
