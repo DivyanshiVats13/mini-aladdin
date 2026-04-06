@@ -11,39 +11,9 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      // ── Route directly to each backend service (bypasses gateway in dev) ──
-      '/api/auth': {
-        target: 'http://localhost:8081',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-      },
-      '/api/portfolios': {
-        target: 'http://localhost:8082',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-      },
-      '/api/assets': {
-        target: 'http://localhost:8082',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-      },
-      '/api/risk': {
-        target: 'http://localhost:8083',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-      },
-      '/api/rebalance': {
-        target: 'http://localhost:8084',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-      },
-      '/api/stress-test': {
-        target: 'http://localhost:8085',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-      },
-      '/api/prices': {
-        target: 'http://localhost:8086',
+      // ── Monolith: all /api/* routes go to single backend ──
+      '/api': {
+        target: 'http://localhost:8080',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },

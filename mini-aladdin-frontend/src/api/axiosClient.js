@@ -1,11 +1,13 @@
 import axios from 'axios';
 
 /**
- * Axios instance pre-configured for the Mini Aladdin API Gateway.
- * In development, Vite proxies /api/* to localhost:8080.
+ * Axios instance pre-configured for the Mini Aladdin API.
+ * 
+ * In development: Vite proxies /api/* to localhost:8080 (monolith).
+ * In production: VITE_API_URL env var points to the Render backend URL.
  */
 const axiosClient = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL || '/api',
   headers: {
     'Content-Type': 'application/json',
   },
