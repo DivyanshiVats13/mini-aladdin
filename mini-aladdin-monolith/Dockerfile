@@ -15,14 +15,14 @@ FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
 
-# Render uses PORT env var
-ENV PORT=8080
-EXPOSE ${PORT}
+# Render sets PORT env var (default 10000 for Docker)
+EXPOSE 10000
 
 # Optimize for free-tier memory (512MB)
 ENTRYPOINT ["java", \
   "-Xmx384m", \
   "-Xms256m", \
   "-XX:+UseSerialGC", \
+  "-Dserver.address=0.0.0.0", \
   "-Dspring.profiles.active=prod", \
   "-jar", "app.jar"]
