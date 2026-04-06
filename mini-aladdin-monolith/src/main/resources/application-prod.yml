@@ -5,6 +5,10 @@ server:
   port: ${PORT:10000}
 
 spring:
+  # Lazy init: start app without DB so Render sees an open port
+  main:
+    lazy-initialization: true
+
   datasource:
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
@@ -24,8 +28,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        boot:
-          allow_jdbc_metadata_access: true
     defer-datasource-initialization: true
 
 logging:
@@ -33,3 +35,4 @@ logging:
     com.minialaddin: INFO
     org.springframework.security: WARN
     com.zaxxer.hikari: DEBUG
+    org.postgresql: DEBUG
