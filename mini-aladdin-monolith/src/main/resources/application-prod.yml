@@ -5,6 +5,10 @@ server:
   port: ${PORT:10000}
 
 spring:
+  # ── Lazy-init: start the web port BEFORE touching the DB ──
+  main:
+    lazy-initialization: true
+
   datasource:
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
@@ -12,30 +16,39 @@ spring:
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 3
-      minimum-idle: 1
+      minimum-idle: 0
       connection-timeout: 60000
       idle-timeout: 300000
       max-lifetime: 600000
-      # Do NOT crash app if DB is unreachable at startup
       initialization-fail-timeout: -1
 
   jpa:
     hibernate:
-      ddl-auto: update
+      # NONE at startup — app starts without touching DB
+      ddl-auto: none
     show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        # Prevent Hibernate from querying DB metadata eagerly at startup
         temp:
           use_jdbc_metadata_defaults: false
-    # Do NOT try to init the datasource before app is ready
     defer-datasource-initialization: false
+    open-in-view: false
 
-  # Disable SQL init scripts (we let Hibernate ddl-auto handle schema)
   sql:
     init:
       mode: never
+
+  flyway:
+    enabled: false
+  liquibase:
+    enabled: false
+
+# ── Disable DB health check so /actuator/health works without DB ──
+management:
+  health:
+    db:
+      enabled: false
 
 logging:
   level:
