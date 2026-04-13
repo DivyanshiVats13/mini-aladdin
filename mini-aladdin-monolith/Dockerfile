@@ -22,10 +22,14 @@ COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 10000
 
 # Optimize for free-tier memory (512MB)
+# -Djava.net.preferIPv4Stack=true  → fixes DNS resolution on some cloud hosts
+# -Djava.security.egd              → faster SecureRandom init (no entropy stall)
 ENTRYPOINT ["java", \
   "-Xmx384m", \
   "-Xms256m", \
   "-XX:+UseSerialGC", \
+  "-Djava.net.preferIPv4Stack=true", \
+  "-Djava.security.egd=file:/dev/./urandom", \
   "-Dserver.address=0.0.0.0", \
   "-Dspring.profiles.active=prod", \
   "-jar", "app.jar"]
