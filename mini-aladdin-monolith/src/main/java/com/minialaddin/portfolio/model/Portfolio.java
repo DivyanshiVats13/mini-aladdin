@@ -1,5 +1,6 @@
 package com.minialaddin.portfolio.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -37,9 +38,11 @@ public class Portfolio {
     @Column(nullable = false, length = 4)
     private String currency = "USD";
 
+    @JsonIgnore
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Holding> holdings = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TargetAllocation> targetAllocations = new ArrayList<>();
 

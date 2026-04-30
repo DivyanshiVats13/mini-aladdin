@@ -49,11 +49,11 @@ public class PortfolioController {
      * GET /portfolios — List all portfolios for the authenticated user.
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Portfolio>>> listPortfolios(
+    public ResponseEntity<ApiResponse<List<PortfolioSummaryResponse>>> listPortfolios(
             HttpServletRequest request) {
         UUID userId = extractUserId(request);
-        List<Portfolio> portfolios = portfolioService.listPortfolios(userId);
-        return ResponseEntity.ok(ApiResponse.ok(portfolios));
+        List<PortfolioSummaryResponse> summaries = portfolioService.listPortfolioSummaries(userId);
+        return ResponseEntity.ok(ApiResponse.ok(summaries));
     }
 
     /**

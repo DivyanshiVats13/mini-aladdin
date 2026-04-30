@@ -15,7 +15,7 @@ export default function AddHoldingModal({ portfolioId, onClose, onAdded }) {
         const timer = setTimeout(async () => {
             setSearching(true);
             try {
-                const res = await axiosClient.get(`/assets/search?q=${encodeURIComponent(query)}`);
+                const res = await axiosClient.get(`/assets?search=${encodeURIComponent(query)}`);
                 if (res.data?.success) setAssets(res.data.data || []);
             } catch { setAssets([]); }
             finally { setSearching(false); }
@@ -31,7 +31,7 @@ export default function AddHoldingModal({ portfolioId, onClose, onAdded }) {
             await axiosClient.post(`/portfolios/${portfolioId}/holdings`, {
                 assetId: selectedAsset.id,
                 quantity: parseFloat(quantity),
-                buyPrice: parseFloat(buyPrice),
+                avgBuyPrice: parseFloat(buyPrice),
             });
             onAdded();
             onClose();

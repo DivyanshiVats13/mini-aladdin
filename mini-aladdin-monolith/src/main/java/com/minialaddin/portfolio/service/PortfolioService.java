@@ -3,6 +3,7 @@ package com.minialaddin.portfolio.service;
 import com.minialaddin.common.exception.ResourceNotFoundException;
 import com.minialaddin.common.exception.BadRequestException;
 import com.minialaddin.common.util.FinanceUtils;
+import com.minialaddin.market.service.MarketDataService;
 import com.minialaddin.portfolio.dto.AddHoldingRequest;
 import com.minialaddin.portfolio.dto.CreatePortfolioRequest;
 import com.minialaddin.portfolio.dto.PortfolioSummaryResponse;
@@ -31,13 +32,16 @@ public class PortfolioService {
     private final PortfolioRepository portfolioRepository;
     private final HoldingRepository holdingRepository;
     private final AssetRepository assetRepository;
+    private final MarketDataService marketDataService;
 
     public PortfolioService(PortfolioRepository portfolioRepository,
             HoldingRepository holdingRepository,
-            AssetRepository assetRepository) {
+            AssetRepository assetRepository,
+            MarketDataService marketDataService) {
         this.portfolioRepository = portfolioRepository;
         this.holdingRepository = holdingRepository;
         this.assetRepository = assetRepository;
+        this.marketDataService = marketDataService;
     }
 
     /**
@@ -50,10 +54,23 @@ public class PortfolioService {
     }
 
     /**
-     * List all portfolios for a user.
+     * List all portfolios for a user (raw entities).
      */
     public List<Portfolio> listPortfolios(UUID userId) {
         return portfolioRepository.findByUserId(userId);
+    }
+
+    /**
+     * List all portfolios for a user with computed summary data
+     * (totalValue, P&L, holdings count, etc.).
+     */
+    public List<PortfolioSummaryResponse> listPortfolioSummaries(UUID userId) {
+        List<Portfolio> portfolios = portfolioRepository.findByUserId(userId);
+        List<PortfolioSummaryResponse> summaries = new ArrayList<>();
+        for (Portfolio portfolio : portfolios) {
+            summaries.add(getPortfolioSummary(portfolio.getId()));
+        }
+        return summaries;
     }
 
     /**
@@ -73,8 +90,9 @@ public class PortfolioService {
         for (Holding holding : portfolio.getHoldings()) {
             Asset asset = holding.getAsset();
 
-            // Until market-data-service is live, currentPrice = avgBuyPrice (flat P&L)
-            BigDecimal currentPrice = holding.getAvgBuyPrice();
+            // Use real market price; fall back to avgBuyPrice if unavailable
+            BigDecimal currentPrice = marketDataService.getPrice(
+                    asset.getTicker(), holding.getAvgBuyPrice());
             BigDecimal marketValue = holding.getQuantity().multiply(currentPrice);
             BigDecimal costBasis = holding.getCostBasis();
             BigDecimal pnL = marketValue.subtract(costBasis);
