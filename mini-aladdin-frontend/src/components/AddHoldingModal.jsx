@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import axiosClient from '../api/axiosClient';
 
+const C = { primary: '#059669', primaryDk: '#047857', txt: '#111827', sub: '#4B5563', muted: '#6B7280', border: '#E5E7EB', green: '#16A34A' };
+
 export default function AddHoldingModal({ portfolioId, onClose, onAdded }) {
     const [query, setQuery] = useState('');
     const [assets, setAssets] = useState([]);
@@ -14,10 +16,8 @@ export default function AddHoldingModal({ portfolioId, onClose, onAdded }) {
         if (query.length < 1) { setAssets([]); return; }
         const timer = setTimeout(async () => {
             setSearching(true);
-            try {
-                const res = await axiosClient.get(`/assets?search=${encodeURIComponent(query)}`);
-                if (res.data?.success) setAssets(res.data.data || []);
-            } catch { setAssets([]); }
+            try { const res = await axiosClient.get(`/assets?search=${encodeURIComponent(query)}`); if (res.data?.success) setAssets(res.data.data || []); }
+            catch { setAssets([]); }
             finally { setSearching(false); }
         }, 300);
         return () => clearTimeout(timer);
@@ -29,110 +29,70 @@ export default function AddHoldingModal({ portfolioId, onClose, onAdded }) {
         setLoading(true);
         try {
             await axiosClient.post(`/portfolios/${portfolioId}/holdings`, {
-                assetId: selectedAsset.id,
-                quantity: parseFloat(quantity),
-                avgBuyPrice: parseFloat(buyPrice),
+                assetId: selectedAsset.id, quantity: parseFloat(quantity), avgBuyPrice: parseFloat(buyPrice),
             });
-            onAdded();
-            onClose();
-        } catch (err) {
-            alert(err.response?.data?.message || 'Failed to add holding');
-        } finally {
-            setLoading(false);
-        }
+            onAdded(); onClose();
+        } catch (err) { alert(err.response?.data?.message || 'Failed to add holding'); }
+        finally { setLoading(false); }
     };
 
+    const inputStyle = { background: '#fff', color: C.txt, border: `1px solid ${C.border}` };
+
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center"
-            style={{ background: 'rgba(2, 6, 23, 0.8)' }}>
-            <div className="glass-card p-6 w-full max-w-lg mx-4" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.4)' }}>
+            <div className="card p-6 w-full max-w-lg mx-4" onClick={e => e.stopPropagation()}>
                 <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-lg font-semibold" style={{ color: 'var(--color-text-primary)' }}>
-                        Add Holding
-                    </h2>
-                    <button onClick={onClose} className="text-xl cursor-pointer"
-                        style={{ color: 'var(--color-text-muted)' }}>✕</button>
+                    <h2 className="text-lg font-semibold" style={{ color: C.txt }}>Add Holding</h2>
+                    <button onClick={onClose} className="text-xl cursor-pointer" style={{ color: C.muted }}>✕</button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                    {/* Asset search */}
                     <div>
-                        <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text-secondary)' }}>
-                            Search Asset
-                        </label>
-                        <input
-                            type="text" value={query} onChange={e => { setQuery(e.target.value); setSelectedAsset(null); }}
-                            placeholder="Search by ticker or name..."
-                            className="w-full px-4 py-3 rounded-lg text-sm outline-none"
-                            style={{ background: 'var(--color-navy-800)', color: 'var(--color-text-primary)', border: '1px solid var(--color-border)' }}
-                        />
-                        {searching && <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>Searching...</p>}
+                        <label className="block text-sm font-medium mb-2" style={{ color: C.sub }}>Search Asset</label>
+                        <input type="text" value={query} onChange={e => { setQuery(e.target.value); setSelectedAsset(null); }}
+                            placeholder="Search by ticker or name..." className="w-full px-4 py-3 rounded-lg text-sm outline-none" style={inputStyle} />
+                        {searching && <p className="text-xs mt-1" style={{ color: C.muted }}>Searching...</p>}
 
-                        {/* Asset results dropdown */}
                         {assets.length > 0 && !selectedAsset && (
-                            <div className="mt-2 rounded-lg overflow-hidden" style={{ border: '1px solid var(--color-border)', background: 'var(--color-navy-800)' }}>
+                            <div className="mt-2 rounded-lg overflow-hidden" style={{ border: `1px solid ${C.border}`, background: '#fff' }}>
                                 {assets.slice(0, 8).map(a => (
                                     <button key={a.id} type="button"
                                         onClick={() => { setSelectedAsset(a); setQuery(`${a.ticker} — ${a.name}`); setAssets([]); }}
-                                        className="w-full text-left px-4 py-2 text-sm flex justify-between items-center cursor-pointer"
-                                        style={{ color: 'var(--color-text-primary)', borderBottom: '1px solid var(--color-border)' }}
-                                        onMouseEnter={e => e.target.style.background = 'var(--color-navy-700)'}
-                                        onMouseLeave={e => e.target.style.background = 'transparent'}
-                                    >
-                                        <span><strong style={{ color: 'var(--color-teal-400)' }}>{a.ticker}</strong> — {a.name}</span>
-                                        <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{a.assetType}</span>
+                                        className="w-full text-left px-4 py-2 text-sm flex justify-between items-center cursor-pointer hover:bg-gray-50"
+                                        style={{ color: C.txt, borderBottom: `1px solid ${C.border}` }}>
+                                        <span><strong style={{ color: C.primaryDk }}>{a.ticker}</strong> — {a.name}</span>
+                                        <span className="text-xs" style={{ color: C.muted }}>{a.assetType}</span>
                                     </button>
                                 ))}
                             </div>
                         )}
 
                         {selectedAsset && (
-                            <p className="text-xs mt-1" style={{ color: 'var(--color-green-400)' }}>
-                                ✓ Selected: {selectedAsset.ticker} — {selectedAsset.name}
-                            </p>
+                            <p className="text-xs mt-1" style={{ color: C.green }}>✓ Selected: {selectedAsset.ticker} — {selectedAsset.name}</p>
                         )}
                     </div>
 
-                    {/* Quantity */}
                     <div>
-                        <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text-secondary)' }}>
-                            Quantity
-                        </label>
-                        <input
-                            type="number" step="any" min="0.01" value={quantity} onChange={e => setQuantity(e.target.value)}
-                            required placeholder="e.g., 10"
-                            className="w-full px-4 py-3 rounded-lg text-sm outline-none"
-                            style={{ background: 'var(--color-navy-800)', color: 'var(--color-text-primary)', border: '1px solid var(--color-border)' }}
-                        />
+                        <label className="block text-sm font-medium mb-2" style={{ color: C.sub }}>Quantity</label>
+                        <input type="number" step="any" min="0.01" value={quantity} onChange={e => setQuantity(e.target.value)}
+                            required placeholder="e.g., 10" className="w-full px-4 py-3 rounded-lg text-sm outline-none" style={inputStyle} />
                     </div>
 
-                    {/* Buy Price */}
                     <div>
-                        <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text-secondary)' }}>
-                            Buy Price ($)
-                        </label>
-                        <input
-                            type="number" step="0.01" min="0.01" value={buyPrice} onChange={e => setBuyPrice(e.target.value)}
-                            required placeholder="e.g., 150.00"
-                            className="w-full px-4 py-3 rounded-lg text-sm outline-none"
-                            style={{ background: 'var(--color-navy-800)', color: 'var(--color-text-primary)', border: '1px solid var(--color-border)' }}
-                        />
+                        <label className="block text-sm font-medium mb-2" style={{ color: C.sub }}>Buy Price ($)</label>
+                        <input type="number" step="0.01" min="0.01" value={buyPrice} onChange={e => setBuyPrice(e.target.value)}
+                            required placeholder="e.g., 150.00" className="w-full px-4 py-3 rounded-lg text-sm outline-none" style={inputStyle} />
                     </div>
 
                     <div className="flex gap-3 mt-2">
                         <button type="submit" disabled={loading || !selectedAsset}
-                            className="flex-1 py-3 rounded-lg text-sm font-semibold cursor-pointer"
-                            style={{
-                                background: (!selectedAsset || loading) ? 'var(--color-navy-600)' : 'var(--color-teal-500)',
-                                color: 'var(--color-navy-950)',
-                            }}>
+                            className="flex-1 py-3 rounded-lg text-sm font-semibold cursor-pointer text-white"
+                            style={{ background: (!selectedAsset || loading) ? '#9CA3AF' : C.primary }}>
                             {loading ? 'Adding...' : 'Add Holding'}
                         </button>
                         <button type="button" onClick={onClose}
                             className="px-6 py-3 rounded-lg text-sm font-medium cursor-pointer"
-                            style={{ background: 'var(--color-navy-700)', color: 'var(--color-text-secondary)' }}>
-                            Cancel
-                        </button>
+                            style={{ background: '#F3F4F6', color: C.sub }}>Cancel</button>
                     </div>
                 </form>
             </div>

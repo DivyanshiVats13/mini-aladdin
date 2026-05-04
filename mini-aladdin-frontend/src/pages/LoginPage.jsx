@@ -25,35 +25,34 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen px-4"
-            style={{ background: 'var(--color-navy-950)' }}>
+        <div className="flex items-center justify-center min-h-screen px-4" style={{ background: '#F9FAFB' }}>
             <div className="w-full max-w-md">
                 {/* Logo */}
                 <div className="text-center mb-8">
-                    <h1 className="text-4xl font-bold mb-2" style={{ color: 'var(--color-teal-400)' }}>
+                    <h1 className="text-3xl font-bold mb-2" style={{ color: '#047857' }}>
                         ✦ Mini Aladdin
                     </h1>
-                    <p style={{ color: 'var(--color-text-muted)' }}>
+                    <p style={{ color: '#6B7280' }}>
                         Portfolio Risk & Rebalancing Engine
                     </p>
                 </div>
 
                 {/* Login Card */}
-                <div className="glass-card p-8">
-                    <h2 className="text-xl font-semibold mb-6" style={{ color: 'var(--color-text-primary)' }}>
+                <div className="card p-8">
+                    <h2 className="text-xl font-semibold mb-6" style={{ color: '#111827' }}>
                         Sign In
                     </h2>
 
                     {error && (
                         <div className="mb-4 p-3 rounded-lg text-sm"
-                            style={{ background: 'rgba(239, 68, 68, 0.1)', color: 'var(--color-red-500)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+                            style={{ background: '#FEF2F2', color: '#DC2626', border: '1px solid #FECACA' }}>
                             {error}
                         </div>
                     )}
 
                     <form onSubmit={handleSubmit}>
                         <div className="mb-4">
-                            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text-secondary)' }}>
+                            <label className="block text-sm font-medium mb-2" style={{ color: '#374151' }}>
                                 Email
                             </label>
                             <input
@@ -63,17 +62,13 @@ export default function LoginPage() {
                                 onChange={e => setEmail(e.target.value)}
                                 required
                                 className="w-full px-4 py-3 rounded-lg text-sm outline-none transition-all duration-200"
-                                style={{
-                                    background: 'var(--color-navy-800)',
-                                    color: 'var(--color-text-primary)',
-                                    border: '1px solid var(--color-border)',
-                                }}
+                                style={{ background: '#fff', color: '#111827', border: '1px solid #D1D5DB' }}
                                 placeholder="you@example.com"
                             />
                         </div>
 
                         <div className="mb-6">
-                            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--color-text-secondary)' }}>
+                            <label className="block text-sm font-medium mb-2" style={{ color: '#374151' }}>
                                 Password
                             </label>
                             <input
@@ -83,11 +78,7 @@ export default function LoginPage() {
                                 onChange={e => setPassword(e.target.value)}
                                 required
                                 className="w-full px-4 py-3 rounded-lg text-sm outline-none transition-all duration-200"
-                                style={{
-                                    background: 'var(--color-navy-800)',
-                                    color: 'var(--color-text-primary)',
-                                    border: '1px solid var(--color-border)',
-                                }}
+                                style={{ background: '#fff', color: '#111827', border: '1px solid #D1D5DB' }}
                                 placeholder="••••••••"
                             />
                         </div>
@@ -97,18 +88,15 @@ export default function LoginPage() {
                             type="submit"
                             disabled={loading}
                             className="w-full py-3 rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer"
-                            style={{
-                                background: loading ? 'var(--color-navy-600)' : 'var(--color-teal-500)',
-                                color: 'var(--color-navy-950)',
-                            }}
+                            style={{ background: loading ? '#9CA3AF' : '#059669', color: '#fff' }}
                         >
                             {loading ? 'Signing in...' : 'Sign In'}
                         </button>
                     </form>
 
-                    <p className="mt-6 text-center text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                    <p className="mt-6 text-center text-sm" style={{ color: '#6B7280' }}>
                         Don't have an account?{' '}
-                        <Link to="/register" className="font-medium" style={{ color: 'var(--color-teal-400)' }}>
+                        <Link to="/register" className="font-medium" style={{ color: '#059669' }}>
                             Create one
                         </Link>
                     </p>

@@ -11,11 +11,11 @@ export default function AppLayout() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
+            <div className="flex items-center justify-center min-h-screen" style={{ background: '#F9FAFB' }}>
                 <div className="text-center">
                     <div className="w-10 h-10 border-3 border-t-transparent rounded-full animate-spin mx-auto mb-3"
-                        style={{ borderColor: 'var(--color-teal-400)', borderTopColor: 'transparent' }} />
-                    <p style={{ color: 'var(--color-text-muted)' }}>Loading...</p>
+                        style={{ borderColor: '#10B981', borderTopColor: 'transparent' }} />
+                    <p style={{ color: '#6B7280' }}>Loading...</p>
                 </div>
             </div>
         );
@@ -29,7 +29,7 @@ export default function AppLayout() {
         <div className="flex min-h-screen">
             <Sidebar />
             <main className="flex-1 ml-64 p-8 overflow-y-auto"
-                style={{ background: 'var(--color-navy-950)' }}>
+                style={{ background: '#F9FAFB' }}>
                 <Outlet />
             </main>
         </div>
