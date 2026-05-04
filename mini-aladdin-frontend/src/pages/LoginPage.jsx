@@ -18,87 +18,70 @@ export default function LoginPage() {
         try {
             await login(email, password);
         } catch (err) {
-            setError(err.response?.data?.message || 'Invalid credentials. Please try again.');
+            if (err.code === 'ERR_NETWORK' || err.code === 'ECONNABORTED') {
+                setError('Server is waking up — please wait 30 seconds and try again.');
+            } else {
+                setError(err.response?.data?.message || 'Invalid credentials. Please try again.');
+            }
         } finally {
             setLoading(false);
         }
     };
 
+    const inputStyle = {
+        background: '#fff', color: '#111827', border: '1px solid #D1D5DB',
+        width: '100%', padding: '0.75rem 1rem', borderRadius: '0.5rem',
+        fontSize: '0.875rem', outline: 'none', boxSizing: 'border-box',
+    };
+
     return (
-        <div className="flex items-center justify-center min-h-screen px-4" style={{ background: '#F9FAFB' }}>
-            <div className="w-full max-w-md">
-                {/* Logo */}
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold mb-2" style={{ color: '#047857' }}>
-                        ✦ Mini Aladdin
-                    </h1>
-                    <p style={{ color: '#6B7280' }}>
-                        Portfolio Risk & Rebalancing Engine
-                    </p>
+        <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            minHeight: '100vh', padding: '2rem 1rem',
+            background: 'linear-gradient(135deg, #F0FDF4 0%, #F9FAFB 50%, #ECFDF5 100%)',
+        }}>
+            <div style={{ width: '100%', maxWidth: '420px' }}>
+                <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                    <h1 style={{ fontSize: '1.875rem', fontWeight: 700, color: '#047857', marginBottom: '0.5rem' }}>✦ Mini Aladdin</h1>
+                    <p style={{ color: '#6B7280', fontSize: '0.875rem' }}>Portfolio Risk & Rebalancing Engine</p>
                 </div>
 
-                {/* Login Card */}
-                <div className="card p-8">
-                    <h2 className="text-xl font-semibold mb-6" style={{ color: '#111827' }}>
-                        Sign In
-                    </h2>
+                <div style={{
+                    background: '#fff', borderRadius: '1rem', padding: '2rem',
+                    boxShadow: '0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04)',
+                    border: '1px solid #E5E7EB',
+                }}>
+                    <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#111827', marginBottom: '1.5rem' }}>Sign In</h2>
 
                     {error && (
-                        <div className="mb-4 p-3 rounded-lg text-sm"
-                            style={{ background: '#FEF2F2', color: '#DC2626', border: '1px solid #FECACA' }}>
-                            {error}
-                        </div>
+                        <div style={{ marginBottom: '1rem', padding: '0.75rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem',
+                            background: '#FEF2F2', color: '#DC2626', border: '1px solid #FECACA' }}>{error}</div>
                     )}
 
                     <form onSubmit={handleSubmit}>
-                        <div className="mb-4">
-                            <label className="block text-sm font-medium mb-2" style={{ color: '#374151' }}>
-                                Email
-                            </label>
-                            <input
-                                id="login-email"
-                                type="email"
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
-                                required
-                                className="w-full px-4 py-3 rounded-lg text-sm outline-none transition-all duration-200"
-                                style={{ background: '#fff', color: '#111827', border: '1px solid #D1D5DB' }}
-                                placeholder="you@example.com"
-                            />
+                        <div style={{ marginBottom: '1rem' }}>
+                            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, color: '#374151', marginBottom: '0.5rem' }}>Email</label>
+                            <input id="login-email" type="email" value={email} onChange={e => setEmail(e.target.value)}
+                                required placeholder="you@example.com" style={inputStyle} />
                         </div>
-
-                        <div className="mb-6">
-                            <label className="block text-sm font-medium mb-2" style={{ color: '#374151' }}>
-                                Password
-                            </label>
-                            <input
-                                id="login-password"
-                                type="password"
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
-                                required
-                                className="w-full px-4 py-3 rounded-lg text-sm outline-none transition-all duration-200"
-                                style={{ background: '#fff', color: '#111827', border: '1px solid #D1D5DB' }}
-                                placeholder="••••••••"
-                            />
+                        <div style={{ marginBottom: '1.5rem' }}>
+                            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, color: '#374151', marginBottom: '0.5rem' }}>Password</label>
+                            <input id="login-password" type="password" value={password} onChange={e => setPassword(e.target.value)}
+                                required placeholder="••••••••" style={inputStyle} />
                         </div>
-
-                        <button
-                            id="login-submit"
-                            type="submit"
-                            disabled={loading}
-                            className="w-full py-3 rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer"
-                            style={{ background: loading ? '#9CA3AF' : '#059669', color: '#fff' }}
-                        >
+                        <button id="login-submit" type="submit" disabled={loading}
+                            style={{
+                                width: '100%', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: 600,
+                                cursor: loading ? 'wait' : 'pointer', border: 'none',
+                                background: loading ? '#9CA3AF' : '#059669', color: '#fff', transition: 'all 0.2s',
+                            }}>
                             {loading ? 'Signing in...' : 'Sign In'}
                         </button>
                     </form>
 
-                    <p className="mt-6 text-center text-sm" style={{ color: '#6B7280' }}>
+                    <p style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.875rem', color: '#6B7280' }}>
                         Don't have an account?{' '}
-                        <Link to="/register" className="font-medium" style={{ color: '#059669' }}>
-                            Create one
-                        </Link>
+                        <Link to="/register" style={{ fontWeight: 500, color: '#059669', textDecoration: 'none' }}>Create one</Link>
                     </p>
                 </div>
             </div>

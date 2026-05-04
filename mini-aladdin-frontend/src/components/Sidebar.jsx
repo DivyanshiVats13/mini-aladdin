@@ -14,69 +14,64 @@ export default function Sidebar() {
     const location = useLocation();
 
     return (
-        <aside className="fixed top-0 left-0 h-screen w-64 flex flex-col border-r"
-            style={{ background: '#fff', borderColor: '#E5E7EB' }}>
-
+        <aside style={{
+            position: 'fixed', top: 0, left: 0, height: '100vh', width: '256px',
+            display: 'flex', flexDirection: 'column',
+            background: '#fff', borderRight: '1px solid #E5E7EB',
+            fontFamily: "'Inter', system-ui, sans-serif",
+        }}>
             {/* Logo */}
-            <div className="p-6 border-b" style={{ borderColor: '#E5E7EB' }}>
-                <h1 className="text-xl font-bold" style={{ color: '#047857' }}>
-                    ✦ Mini Aladdin
-                </h1>
-                <p className="text-xs mt-1" style={{ color: '#6B7280' }}>
-                    Portfolio Risk Engine
-                </p>
+            <div style={{ padding: '1.5rem', borderBottom: '1px solid #E5E7EB' }}>
+                <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#047857', margin: 0 }}>✦ Mini Aladdin</h1>
+                <p style={{ fontSize: '0.75rem', marginTop: '0.25rem', color: '#6B7280' }}>Portfolio Risk Engine</p>
             </div>
 
             {/* Navigation */}
-            <nav className="flex-1 py-4 overflow-y-auto">
+            <nav style={{ flex: 1, padding: '1rem 0', overflowY: 'auto' }}>
                 {navItems.map(item => {
                     const isActive = location.pathname.startsWith(item.path);
                     return (
-                        <NavLink
-                            key={item.path}
-                            to={item.path}
-                            className="flex items-center gap-3 px-6 py-3 text-sm transition-all duration-200"
+                        <NavLink key={item.path} to={item.path}
                             style={{
+                                display: 'flex', alignItems: 'center', gap: '0.75rem',
+                                padding: '0.75rem 1.5rem', fontSize: '0.875rem',
+                                textDecoration: 'none', transition: 'all 0.2s',
                                 color: isActive ? '#047857' : '#4B5563',
                                 background: isActive ? '#ECFDF5' : 'transparent',
                                 borderRight: isActive ? '3px solid #059669' : '3px solid transparent',
                                 fontWeight: isActive ? 600 : 500,
-                            }}
-                        >
-                            <span className="text-lg">{item.icon}</span>
+                            }}>
+                            <span style={{ fontSize: '1.125rem' }}>{item.icon}</span>
                             <span>{item.label}</span>
                         </NavLink>
                     );
                 })}
             </nav>
 
-            {/* User info + Logout */}
-            <div className="p-4 border-t" style={{ borderColor: '#E5E7EB' }}>
-                <div className="flex items-center gap-3 mb-3">
-                    <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold"
-                        style={{ background: '#D1FAE5', color: '#047857' }}>
+            {/* User info */}
+            <div style={{ padding: '1rem', borderTop: '1px solid #E5E7EB' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                    <div style={{
+                        width: '36px', height: '36px', borderRadius: '50%',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: '0.875rem', fontWeight: 700, background: '#D1FAE5', color: '#047857',
+                    }}>
                         {user?.fullName?.charAt(0)?.toUpperCase() || 'U'}
                     </div>
-                    <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium truncate" style={{ color: '#111827' }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ fontSize: '0.875rem', fontWeight: 500, color: '#111827', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                             {user?.fullName || 'User'}
                         </p>
-                        <p className="text-xs truncate" style={{ color: '#6B7280' }}>
-                            {user?.tier || 'FREE'} tier
-                        </p>
+                        <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>{user?.tier || 'FREE'} tier</p>
                     </div>
                 </div>
-                <button
-                    onClick={logout}
-                    className="w-full py-2 px-3 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer"
+                <button onClick={logout}
                     style={{
-                        color: '#4B5563',
-                        background: '#F3F4F6',
-                        border: '1px solid #E5E7EB',
-                    }}
-                    onMouseEnter={e => e.target.style.background = '#E5E7EB'}
-                    onMouseLeave={e => e.target.style.background = '#F3F4F6'}
-                >
+                        width: '100%', padding: '0.5rem 0.75rem', borderRadius: '0.5rem',
+                        fontSize: '0.875rem', fontWeight: 500, cursor: 'pointer',
+                        color: '#4B5563', background: '#F3F4F6', border: '1px solid #E5E7EB',
+                        transition: 'all 0.2s',
+                    }}>
                     Sign Out
                 </button>
             </div>

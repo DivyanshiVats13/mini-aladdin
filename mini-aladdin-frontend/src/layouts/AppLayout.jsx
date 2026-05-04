@@ -2,34 +2,29 @@ import { Outlet, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Sidebar from '../components/Sidebar';
 
-/**
- * Protected layout: sidebar + main content.
- * Redirects to /login if not authenticated.
- */
 export default function AppLayout() {
     const { isAuthenticated, loading } = useAuth();
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen" style={{ background: '#F9FAFB' }}>
-                <div className="text-center">
-                    <div className="w-10 h-10 border-3 border-t-transparent rounded-full animate-spin mx-auto mb-3"
-                        style={{ borderColor: '#10B981', borderTopColor: 'transparent' }} />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#F9FAFB' }}>
+                <div style={{ textAlign: 'center' }}>
+                    <div style={{
+                        width: '40px', height: '40px', border: '3px solid #10B981', borderTopColor: 'transparent',
+                        borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 0.75rem',
+                    }} />
                     <p style={{ color: '#6B7280' }}>Loading...</p>
                 </div>
             </div>
         );
     }
 
-    if (!isAuthenticated) {
-        return <Navigate to="/login" replace />;
-    }
+    if (!isAuthenticated) return <Navigate to="/login" replace />;
 
     return (
-        <div className="flex min-h-screen">
+        <div style={{ display: 'flex', minHeight: '100vh' }}>
             <Sidebar />
-            <main className="flex-1 ml-64 p-8 overflow-y-auto"
-                style={{ background: '#F9FAFB' }}>
+            <main style={{ flex: 1, marginLeft: '256px', padding: '2rem', background: '#F9FAFB', overflowY: 'auto' }}>
                 <Outlet />
             </main>
         </div>
