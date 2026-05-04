@@ -223,4 +223,4 @@ mini-aladdin/
 
 ## 📄 License
 
-MIT — Built for educational and portfolio demonstration purposes.
+**All Rights Reserved** © 2026 Divyanshi Vats. See [LICENSE](./LICENSE) for details.

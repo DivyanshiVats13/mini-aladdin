@@ -24,8 +24,8 @@ spring:
 
   jpa:
     hibernate:
-      # NONE at startup — app starts without touching DB
-      ddl-auto: none
+      # update: auto-create/update tables on startup
+      ddl-auto: update
     show-sql: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
@@ -43,6 +43,11 @@ spring:
     enabled: false
   liquibase:
     enabled: false
+
+# ── CORS: allow Vercel frontend ──
+app:
+  cors:
+    allowed-origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:3000}
 
 # ── Disable DB health check so /actuator/health works without DB ──
 management:
