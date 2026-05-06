@@ -2,6 +2,8 @@
 
 A full-stack **SaaS platform** for portfolio management, real-time risk analytics, allocation rebalancing, and historical crash stress testing. Built with **Spring Boot 3.4** (monolith) and **React 19 + Vite**.
 
+### 🌐 [Live Demo →](https://mini-aladdin-flame.vercel.app)
+
 ---
 
 ## 🏗 Architecture
@@ -178,7 +180,7 @@ All endpoints are behind JWT authentication (except auth endpoints).
 | **Market Data** | Yahoo Finance (free, no API key needed) |
 | **Frontend** | React 19, Vite 7, Tailwind CSS 4 |
 | **HTTP Client** | Axios with JWT interceptor |
-| **Design** | Glassmorphism, dark navy palette, Inter font |
+| **Design** | Clean white + emerald green, Inter font |
 
 ---
 
