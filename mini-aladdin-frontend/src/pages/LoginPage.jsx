@@ -80,8 +80,7 @@ export default function LoginPage() {
                     </form>
 
                     <p style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.875rem', color: '#6B7280' }}>
-                        Don't have an account?{' '}
-                        <Link to="/register" style={{ fontWeight: 500, color: '#059669', textDecoration: 'none' }}>Create one</Link>
+                        <Link to="/" style={{ fontWeight: 500, color: '#059669', textDecoration: 'none' }}>← Back to project</Link>
                     </p>
                 </div>
             </div>
