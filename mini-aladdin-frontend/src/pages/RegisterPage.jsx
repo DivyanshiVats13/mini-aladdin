@@ -54,7 +54,7 @@ export default function RegisterPage() {
                     <h1 style={{ fontSize: '1.875rem', fontWeight: 700, color: '#047857', marginBottom: '0.5rem' }}>
                         ✦ Mini Aladdin
                     </h1>
-                    <p style={{ color: '#6B7280', fontSize: '0.875rem' }}>Create your free account</p>
+                    <p style={{ color: '#6B7280', fontSize: '0.875rem' }}>Create an account to explore</p>
                 </div>
 
                 {/* Register Card */}

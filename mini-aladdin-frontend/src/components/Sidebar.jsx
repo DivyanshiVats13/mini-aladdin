@@ -62,7 +62,7 @@ export default function Sidebar() {
                         <p style={{ fontSize: '0.875rem', fontWeight: 500, color: '#111827', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                             {user?.fullName || 'User'}
                         </p>
-                        <p style={{ fontSize: '0.75rem', color: '#6B7280', margin: 0 }}>{user?.tier || 'FREE'} tier</p>
+                        <p style={{ fontSize: '0.7rem', color: '#9CA3AF', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user?.email || ''}</p>
                     </div>
                 </div>
                 <button onClick={logout}
